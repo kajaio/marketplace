@@ -1,0 +1,51 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      # Side by side, as on a developer's machine: kaja's content tests read ../marketplace
+      - name: Checkout marketplace
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: marketplace
+
+      - name: Checkout Kaja
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: kajaio/kaja
+          path: kaja
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+
+      - name: Install Kaja dependencies
+        working-directory: kaja
+        run: bun install --frozen-lockfile
+
+      # Every ability, persona and dataset loads the way Kaja loads it; stdio packages are pinned; the sandbox image runs them
+      - name: Run Kaja's marketplace tests
+        working-directory: kaja
+        run: bun run test:marketplace
+
+      - name: Read Tombi version
+        id: tombi
+        working-directory: kaja
+        run: echo "version=$(bun scripts/tool.ts tombi --pinned)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Tombi
+        uses: tombi-toml/setup-tombi@d8f3250344c4e9107b91c02bc11efcf72baf5793
+        with:
+          version: ${{ steps.tombi.outputs.version }}
+
+      - name: Check TOML format and schemas
+        working-directory: marketplace
+        run: tombi format --check && tombi lint

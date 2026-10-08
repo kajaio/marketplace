@@ -6,14 +6,14 @@
 
 # Kaja marketplace
 
-The abilities Kaja can load: personas, skills, HTTP tools, MCP servers and datasets. Local users get this folder with `kaja abilities update`, and the Kaja API syncs it every hour for cloud users, who pick theirs on the [Abilities page](https://kaja.io/agent/abilities).
+The abilities Kaja can load: personas, skills, HTTP tools, MCP servers and datasets. Local users get this repo with `kaja abilities update`, the Kaja API syncs it every hour for cloud users, and MCP sandboxes fetch it when they start. Every host merges it with any other marketplace repo it's set up with (such as the private `kajaio/darkmarket`), later ones replacing an ability or persona of the same name. Only `abilities/`, `personas/` and `datasets/` reach users; CI checks every file the way Kaja loads it.
 
 Only the repo owner adds abilities here (a merged pull request counts), so there is no publish flow. To try a new one before it's merged, see [Adding to the marketplace](https://docs.kaja.io/abilities/marketplace#adding-to-the-marketplace).
 
 ## Layout
 
 ```
-marketplace/
+.
 ├─ abilities/<name>/  # one folder per ability, named after it; any mix of these parts:
 │  ├─ SKILL.md        # a skill: frontmatter (description, optional sticky) + instructions
 │  ├─ *.md            # optional extra files the instructions point to

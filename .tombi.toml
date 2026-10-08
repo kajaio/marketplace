@@ -1,0 +1,35 @@
+toml-version = "v1.1.0"
+
+# The schemas come from kajaio/kaja (generated from @kaja/schema there), so editors and CI check these files
+# against what Kaja actually loads.
+
+
+[format]
+  [format.rules]
+  indent-sub-tables               = true
+  key-value-equals-sign-alignment = true
+  line-width                      = 1         # all array items on new lines
+  string-quote-style              = "double"
+  table-blank-lines               = 2
+  trailing-comment-alignment      = true
+
+
+[[schemas]]
+path    = "https://raw.githubusercontent.com/kajaio/kaja/main/config/schemas/http-tool.json"
+include = [
+  "abilities/*/tool.toml"
+]
+
+
+[[schemas]]
+path    = "https://raw.githubusercontent.com/kajaio/kaja/main/config/schemas/mcp-ability.json"
+include = [
+  "abilities/*/mcp.toml"
+]
+
+
+[[schemas]]
+path    = "https://raw.githubusercontent.com/kajaio/kaja/main/config/schemas/persona.json"
+include = [
+  "personas/*.toml"
+]
